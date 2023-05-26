@@ -153,7 +153,7 @@ jsPsych.plugins["demographic-response"] = (function() {
         function end_trial() {
 
             p_age = document.getElementById("age").value;
-            p_language = document.getElementById("language").value;
+            // p_language = document.getElementById("language").value;
             //p_country = document.getElementById("country").value;
 
             gender_radios = document.getElementsByName("gender");
