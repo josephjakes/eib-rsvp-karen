@@ -211,7 +211,8 @@
 
     //var imageFilenames = [];
 
-    let ts = 'resources/images/'
+    //let ts = 'resources/images/'
+    let ts = 'resources/resized_images/'
     var imageFilenames = [
         ts + 'IMG001.jpg',
         ts + 'IMG002.jpg',
@@ -573,9 +574,9 @@
       target1Filenames[ii] = "images/targets/target" + ii + "_1.jpg";
     }
 
-    //imageFilenames = imageFilenames.concat(target1Filenames);
+    imageFilenames = imageFilenames.concat(target1Filenames);
 
-    //imageFilenames = imageFilenames.concat("images/target_example_white.jpg");
+    imageFilenames = imageFilenames.concat("images/target_example_white.jpg");
 
     const positiveImages = picStimuli
         .filter(
@@ -2055,8 +2056,8 @@
     // ******************* SET TIMELINE AND RUN EXPT ******************
 
     var exptTimeline = [];
-
     if (usingComputer) {
+        /**
         exptTimeline.push(welcome1);
         exptTimeline.push(welcome2);
         
@@ -2080,6 +2081,7 @@
         if (instructVersion == 1) {
             exptTimeline.push(loop_distInstruct_instructions);
         } //[STEVE: DON'T NEED TWO SEPARATE INSTRUCTVERSIONS HERE]
+        **/
         exptTimeline.push(loop_RSVPBlocks);
         exptTimeline.push(if_node_nextBlockMemory);
         exptTimeline.push(if_node_memBlock);
