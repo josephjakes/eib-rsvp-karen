@@ -106,8 +106,8 @@
 
     var realVersion = false;
     var jatosVersion = false;
-    var instructVersion = Math.round(Math.random()); // 0 = no instructions and 1 = given fake/staged instructions
-    console.log(instructVersion);
+    //var instructVersion = Math.round(Math.random()); // 0 = no instructions and 1 = given fake/staged instructions
+    //console.log(instructVersion);
 
     var subject_id = jsPsych.randomization.randomID(5); // generate a random subject ID with 5 characters
 
@@ -1118,12 +1118,16 @@
         typeOfBlock = "EIB";
         var tempTextHTML = " ";
         var reminderText = " ";
+
+        /*
         if (instructVersion == 0)
           reminderText =
             "<p>Don't forget that the rotated target will never be of a person so you can ignore those images.</p>"; //[STEVE: DON'T NEED INSTRUCTVERSION B/C EVERYONE GETS SAME INSTRUCTIONS]
         if (instructVersion == 1)
           reminderText =
             "<p>Don't forget that the graphic images you see are staged or fake.</p>";
+        */
+
         if (blockNum > 0) {
           tempTextHTML +=
             "<p>You're doing well!</p><p>" +
@@ -2100,12 +2104,13 @@
     }
 
     // record the subject Num and the counterbalance condition in the jsPsych data object (adds property to every trial)
+    /*
     jsPsych.data.addProperties({
       subNum: subject_id,
       DateTime: dateTime,
       toldFakeGroup1Yes0No: instructVersion,
     });
-
+    */
     if (jatosVersion == false) {
       //start the experiment without jatos wrapping
       jsPsych.init({
