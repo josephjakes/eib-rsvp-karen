@@ -898,7 +898,7 @@
     // ******************* INITIAL INSTRUCTIONS ******************
 
     var tempInstrStr =
-      '<p style="text-align:left">Thanks for agreeing to take part in this study!<br><br>In this study, you will be asked to complete a <b>target detection</b> task.<br><br>Each trial will start with a cross appearing - this tells you that the trial is about to begin. You will then see a stream of pictures flash up rapidly in the center of the screen, one after another.<br><br></p>';
+      '<p style="text-align:left">This task involves a series of trials. Each trial will start with a cross appearing - this tells you that the trial is about to begin. You will then see a stream of pictures flash up rapidly in the center of the screen, one after another.<br><br></p>';
 
     var target_example =
       '<p style="text-align:center"><img src="images/target_example_white.jpg" /><br></p>';
@@ -1152,7 +1152,7 @@
     var nextBlockMemory = {
       type: "html-keyboard-response",
       stimulus:
-        "<p>You're finished with the rotation task. <br><br> Now you will complete a slightly different task. <br><br> On each trial you will be shown an image for 3 seconds. <br><br> Please indicate within 3 seconds whether or not you have seen the image in the previous task by pressing the LEFT arrow key (<) if you have seen the image before or the RIGHT arrow key (>) if you have not seen the image before.<br><br>Press any key to begin</p>",
+        "<p>You are now finished with the target detection task. <br><br> Next you will complete a slightly different task. <br><br> On each trial you will be shown an image for 1 second. <br><br> Please indicate within 3 seconds whether or not you have seen the image in the previous task by pressing the LEFT arrow key (<) if you have seen the image before or the RIGHT arrow key (>) if you have not seen the image before.<br><br>Press any key to begin</p>",
       on_finish: function () {
         negcounter = 0; //reset to 0 so that we can show them again in the memory.
         neutcounter = 0;
@@ -1417,14 +1417,6 @@
         ";margin:" +
         mWidth +
         ';">' +
-        "	<b> Contact for feelings of distress </b><br>" +
-        "	The NHS provides links and contact information for a number of free mental health resources, including 24-hour advice and support and free listening services." +
-        ' These can be found at the following webpage: <a href="https://www.nhs.uk/nhs-services/mental-health-services/"target="_blank"> NHS Support Services </a>' +
-        '			<p style="text-align:left;line-height:120%;font-size:' +
-        smallFontSize +
-        ";margin:" +
-        mWidth +
-        ';">' +
         "	<b>What if I have a complaint or concerns about the research study?</b><br>" +
         "		If you have a complaint regarding any aspect of the study or the way it is being conducted, please contact the UNSW Human Ethics Coordinator:" +
         '	<ul style="text-align:left;line-height:120%;font-size:' +
@@ -1455,6 +1447,16 @@
         ';"><br>Please close the browser window if you do not wish to participate.<br><br></p>',
     };
 
+    const realWorldImplications = "Real-world implications of this research relate to potential identification of a marker for depression. Such a marker may suggest avenues for using attentional bias modification to train attention towards positive stimuli (not just away from negative), which may provide therapeutic benefit for individuals suffering from depression."
+
+    const potentialLimitations = "One potential issue of this study is that we are not using a diagnostic measure of depression and are capitalising on variation on this measure in the general student population. This may limit the degree to which we observe predicted individual differences."
+
+    const methodology = "This study will use a quasi-experimental design. The independent variable will be whether distracting stimuli are emotionally positive or neutral. Dependent variables will be the degree of impairment to accuracy in completing an emotion-induced blindness task and the level of memory encoding measured using a surprise memory test."
+
+    const EIBStudy = "Most, S. B., Chun, M. M., Widders, D. M., & Zald, D. H. (2005). Attentional rubbernecking: Cognitive control and personality in emotion-induced blindness. Psychonomic Bulletin & Review, 12, 654-661. https://doi.org/10.3758/bf03196754"
+
+    const DepressionAndPositiveStimuliStudy = "Kahrilas, I. J., Smith, J. L., Silton, R. L., & Bryant, F. B. (2020). Savoring the moment: A link between affectivity and depression. International Journal of Wellbeing, 10(2). https://doi.org/10.5502/ijw.v10i2.779"
+
     //******Debriefing*****
     var debrief = {
       type: "html-button-response",
@@ -1463,33 +1465,41 @@
         smallFontSize +
         ";margin:" +
         mWidth +
-        ';margin-top:30px;">Approval No 3670</p>' +
+        ';margin-top:30px;">Approval No 3671</p>' +
         '			<p style="text-align:center;"><b>THE UNIVERSITY OF NEW SOUTH WALES<br>' +
         "			Additional Study (Debriefing) Information</b><br><br><b>Rapid Search & Appraisal</b><br></p>" +
-        "<b>THANK YOU FOR PARTICIPATING. REST ASSURED THAT ALL UNPLEASANT IMAGES USED IN THIS STUDY WERE STAGED USING SPECIAL EFFECTS AND MAKEUP.</b><br>" +
+        "<b>Thank you for participating in our study. Below is some additional background on the purpose of our study, for your information.</b><br>" +
         '			<p style="text-align:left;line-height:120%;font-size:' +
         smallFontSize +
         ";margin:" +
         mWidth +
         ';"><b>(a) What are the research questions?</b><br>' +
-        "			The study investigates whether knowing that emotional averse stimuli are fake changes their impact on perception, impact on memory and how people subjectively rate their intensity<br><br>" +
+        "			Our study aims to assess whether individual differences related to depression predict distraction by positive images and spontaneous encoding of positive images into memory, consistent with proposals that depressed mood is associated with less savouring of positive stimuli. (Note that our measure of depression is relative and is not diagnostic.)<br><br>" +
         "			<b>(b)	How does this study extend previous research on this topic?</b><br>" +
-        "			Previous research has consistently demonstrated an effect known as emotion-induced blindness, where emotional images embedded in a rapid stream impair the ability to see a subsequent target. Emotional stimuli also tend to be remembered better. The current study aims to investigate whether these effects are driven purely by the content of the images or can be modulated by how people think about the pictures (e.g., knowing that they are fake). In this experiment, half of the participants were told that the pictures were fake at the start of the experiment and half were not told this until the end.<br><br>" +
+        "			This study builds on prior research on the emotion-induced blindness effect whereby emotional stimuli has been shown to lead to an impairment in accurately identifying a target image. Whereas most previous work has used negative emotional stimuli and has sometimes found that negative mood is linked with more distraction by negative stimuli, this study uses positive stimuli and predicts that negative mood will be linked with less distraction by them.<br><br>" +
         "			<b>(c)	What are some potential real-world implications of this research?</b><br>" +
-        "			Cognitive appraisal is the assessment of an emotional situation, where a person evaluates how that situation will affect them by interpreting different aspects of that situation. The appraisal of a stimulus as threatening or disturbing often leads to responses such as stress and fear. This study aims to examine whether influencing the cognitive appraisal of threatening or disturbing stimuli will lower the extent to which they impair awareness and response to target stimuli. This may help researchers better understand strategies for reducing the trauma of witnessing upsetting scenes in the real world. <br><br>" +
+        `			${realWorldImplications}<br><br>` +
         "			<b>(d)	What is a potential issue or limitation of the study?</b><br>" +
-        "			A limitation with the design of the study is the reliance on participant ability to report how emotional they find a stimulus to be. Not everyone has equal insight into their emotional reactions. A more objective measure of emotional response could include the galvanic skin response, a measure of physiological arousal. However, as this study will be run online, this is not feasible. <br><br>" +
+        `			${potentialLimitations}<br><br>` +
         "			<b>(e)	What is the methodology of this study?</b><br>" +
-        "			The experiment is a 2 x 2 between-subjects design. The first independent variable is whether participants are told that the aversive stimuli are fake at the start of the experiment. The second independent variable is the emotional valence of the critical pictures (negative vs. neutral). There are three dependent variables. The first is the mean percentage accuracy in reporting the correct target orientation in the emotion-induced blindness task. The second is the subjective rating of unpleasantness (1=pleasant, 9 = unpleasant) and arousal (1=calm, 9= highly arousing) for emotional distractors. The third is how well participants remembered the critical distractors in a surprise memory test. <br><br>" +
+        `			${methodology} <br><br>` +
         "			<b>(f)	Is there any further reading I can do if I am interested in this topic?</b><br>" +
-        "			For more information about the phenomenon of emotion-induced blindness, see:<br>" +
+        "			For more information about the phenomenon of emotion-induced blindness see:<br></p>" +
         '		<ul style="text-align:left;line-height:120%;font-size:' +
         smallFontSize +
         "; margin:" +
         mWidth +
         ';">' +
-        "			<li>Most, S. B., Chun, M. M., Widders, D. M., & Zald, D. H. (2005). Attentional rubbernecking: Cognitive control and personality in emotion-induced blindness. Psychonomic Bulletin & Review, 12(4), 654-661. https://doi.org/10.3758/BF03196754</li>" +
-        "			<li>Wang, L., Kennedy, B. L., & Most, S. B. (2012). When emotion blinds: A spatiotemporal competition account of emotion-induced blindness. Frontiers in Psychology, 3, 438. https://doi.org/10.3389/fpsyg.2012.00438</li>" +
+        `			<li>${EIBStudy}</li>` +
+        "<br>			</ul>" +
+        `			<p style="text-align:left;line-height:120%;font-size:${smallFontSize}; margin: ${mWidth};">` + 
+        "For more information on the connections between depression and savouring of positive stimuli see:<br></p>" +
+        '		<ul style="text-align:left;line-height:120%;font-size:' +
+        smallFontSize +
+        "; margin:" +
+        mWidth +
+        ';">' +
+        `			<li>${DepressionAndPositiveStimuliStudy}</li>` +
         "			</ul>" +
         '			<p style="text-align:left;line-height:120%;font-size:' +
         smallFontSize +
@@ -1508,8 +1518,7 @@
       choices: [
         '<p style="font-size:130%;line-height:0%;"><b>I have read the information!</b></p>',
       ],
-      prompt:
-        "<br>Clicking here will finish the experiment and redirect you back to Prolific to receive your payment. Thank you for participating.",
+      prompt: "<br>",
     };
 
     //SHOW THREE IMAGES TO MAKE SURE THAT THEY DO REALLY WANT TO CONTINUE
@@ -1535,7 +1544,7 @@
 
     // *******************INSTRUCTION-D******************
     //Note: edited first INSTRUCT set to contain statement that stimuli are fake
-    var INSTRUCTD = {
+    /*var INSTRUCTD = {
       //[STEVE: DON'T NEED INSTRUCTD OR INSTRUCTND]
       type: "html-button-response",
       stimulus:
@@ -1635,7 +1644,7 @@
         return distInstruct_repeatInstructions; // If this is true, it will execute timeline (show failure screen)
       },
     };
-    var loop_distInstruct_instructions = {
+    /*var loop_distInstruct_instructions = {
       timeline: [
         INSTRUCTD,
         distInstruct_instruction_check,
@@ -1644,8 +1653,7 @@
       loop_function: function () {
         return distInstruct_repeatInstructions; // If distInstruct_repeatInstructions remains true, this will keep looping; if it becomes false, it will move on.
       },
-    };
-
+    };*/
     //**************Picture graphic/arousing questions**********************
 
     var MCHECKAoptions = ["1.", "2", "3", "4", "5", "6", "7", "8", "9."];
@@ -1904,7 +1912,8 @@
         '           <label for="gender"><b>Gender: &nbsp;</b></label>' +
         '           <input type="radio" name="gender" value="male" /> Male &nbsp; ' +
         '           <input type="radio" name="gender" value="female" /> Female &nbsp;' +
-        '           <input type="radio" name="gender" value="other" /> Other<br /><br />' +
+        '           <input type="radio" name="gender" value="non-binary" /> Non-binary<br /><br />' +
+        '           <input type="radio" name="gender" value="prefer-not-to-say" /> Prefer not to say &nbsp;' +
         "			<!-- Age -->" +
         '           <label for="age (in years)"><b>Age: &nbsp;</b></label><input id="age" name="age" /><br /><br />' +
         "			<br><br><br>",
@@ -2089,7 +2098,7 @@
 
     var exptTimeline = [];
     if (usingComputer) {
-      
+      exptTimeline.push(debrief); //save data here.
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       
@@ -2097,6 +2106,7 @@
           type: "fullscreen",
           fullscreen_mode: true,
       });
+      exptTimeline.push(NEURinstruction);
       exptTimeline.push(dass21);
       exptTimeline.push(loop_initial_instructions);
       exptTimeline.push(ready_to_start_practice);
