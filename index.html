@@ -1941,17 +1941,19 @@
           '           <label for="gender"><b>Gender: &nbsp;</b></label>' +
           '           <input type="radio" name="gender" value="male" /> Male &nbsp; ' +
           '           <input type="radio" name="gender" value="female" /> Female &nbsp;' +
-          '           <input type="radio" name="gender" value="other" /> Other<br /><br />' +
+          '           <input type="radio" name="gender" value="non-binary" /> Non-binary &nbsp;' +
+          '           <input type="radio" name="gender" value="prefer-not-to-say" /> Prefer not to say<br /><br />' +
           "			<!-- Age -->" +
           '           <label for="age (in years)"><b>Age: &nbsp;</b></label><input id="age" name="age" /><br /><br />' + 
-          `<div><label for='haveADHD'>Do you currently have a diagnosis of ADHD?</label><br><input name='haveADHD' type='radio'>Yes</input></div>`+
-          `<div><input type='radio' name='haveADHD'>No</input></div>` + 
-          `<div><input type='radio' name='haveADHD'>Rather not say</div><br>` +
+          `<div><label for='haveADHD'>Do you currently have a diagnosis of ADHD?</label><br><input name='haveADHD' type='radio' value="yes">Yes</input></div>`+
+          `<div><input type='radio' name='haveADHD' value=no>No</input></div>` + 
+          `<div><input type='radio' name='haveADHD' value="prefer-not-to-say">Prefer not to say</div><br>` +
           //`</fieldset>` +
         //`<fieldset>` + 
           `<div><label for='isMedicatedForADHD'>If so, are you currently taking medication for ADHD?</label>`+
-          `<div><input type='radio' name='isMedicatedForADHD'>Yes</input></div>` + 
-          `<div><input type='radio' name='isMedicatedForADHD'>No</input></div><br>` 
+          `<div><input type='radio' name='isMedicatedForADHD' value="yes">Yes</input></div>` + 
+          `<div><input type='radio' name='isMedicatedForADHD' value="no">No</input></div><br>` + 
+          `<div><input type='radio' name='isMedicatedForADHD' value="prefer-not-to-say">Prefer not to say</input></div><br>`
           //`</fieldset>` +
       //`</form>`
           
@@ -2032,7 +2034,7 @@
       },
     };
     var if_node_picQDemo = {
-      timeline: [picResponse, demographics],
+      timeline: [picResponse],
       conditional_function: function () {
         if (quitButtonCount == 1) {
           //here I check if they have pushed q or not.
@@ -2098,7 +2100,6 @@
 
     var exptTimeline = [];
     if (usingComputer) {
-      exptTimeline.push(debrief); //save data here.
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       
