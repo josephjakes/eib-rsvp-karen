@@ -2151,17 +2151,19 @@
       jatos.onLoad(function () {
         /* start the experiment with jatos wrapping AND set up the Prolific talk back*/
         // ---------- subject info ----------
-        var prolific_id = jatos.urlQueryParameters.PROLIFIC_PID; //
-        var completion_url =
-          "https://app.prolific.co/submissions/complete?cc=CDUKJ5BN";
+        //var prolific_id = jatos.urlQueryParameters.PROLIFIC_PID; //
+        //var completion_url = "https://app.prolific.co/submissions/complete?cc=CDUKJ5BN";
+        /*
         var finish_msg =
           'All done! Please click <a href="' +
           completion_url +
           '">here</a> to be returned to Prolific and receive your completion code notification.';
+          
         // record the subject Num in the jsPsych data (adds property to every trial)
         jsPsych.data.addProperties({
           prolificID: prolific_id,
         });
+        */
 
         jsPsych.init({
           preload_images: imageFilenames,
