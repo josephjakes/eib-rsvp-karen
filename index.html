@@ -1151,10 +1151,11 @@
     console.log('negative eib images:', negativeEibImages);
     console.log('neutral eib images:', neutralEibImages);
 
-
-    function get_memory_trial_stimulus() {
-      const memTrialType = memTrialSelector[memTrialCounter];
-      const imageFilePath = ""
+/*
+    function get_memory_trial_stimulus(mem_trial_counter_non_global) {
+      console.log('mem_trial_counter_non_global:', mem_trial_counter_non_global)
+      const memTrialType = memTrialSelector[mem_trial_counter_non_global];
+      let imageFilePath = ""
       if (memTrialType == 1) {
         imageFilePath = negativeEibImages[negcounter]; //1 = neg old
         console.log(imageFilePath);
@@ -1175,7 +1176,7 @@
 
       return imageFilePath;
     }
-
+*/
     var memTrialCounter = 0; // this counter does not get reset
 
     var PressSpacebartrial = {
@@ -1201,6 +1202,8 @@
       stimulus_duration: 1000,
       stimulus: function () {
         memTrialType = memTrialSelector[memTrialCounter];
+
+        console.log(`in memory task trial: memTrialCounter`, memTrialCounter);
 
         if (memTrialType == 1) {
           memPic = negativeEibImages[negcounter]; //1 = neg old
@@ -1257,24 +1260,41 @@
       },
     };
 
-    function getMemoryTestPositivityRatingTrial(imagePath) {
-      const positivityRatingTrial = {
-        type: "survey-multi-choice",
-        preamble:
-          '<p style=";margin:10px;">During this experiment, you saw several images that were pleasant. Please read each statement below and select the answer that best represents your OVERALL FEELING to these images. Your answers will remain anonymous and confidential so please be honest.</p>',
-        questions: [
-          {
-            prompt: `<img src="${get_memory_trial_stimulus()}"><br>1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - how pleasant would you rate your emotional reaction to these images?`,
-            name: "picsPleasant",
-            options: MCHECKAoptions,
-            required: true,
-            horizontal: true,
-          },
-        ],
-      };
+    var MCHECKAoptions = ["1.", "2", "3", "4", "5", "6", "7", "8", "9."];
 
-      return positivityRatingTrial;
-    }
+    var MemoryReratingTrial = {
+      type: "survey-multi-choice",
+      questions: function () {
+        memTrialType = memTrialSelector[memTrialCounter];
+        console.log(`in rerating: memTrialCounter`, memTrialCounter);
+    
+        if (memTrialType == 1) {
+          memPic = negativeEibImages[negcounter - 1]; //1 = neg old
+          console.log(memPic);
+        } else if (memTrialType == 2) {
+          memPic = negativeFoilImages[neg_foilcounter - 1]; //2 = neg_foils
+          console.log(memPic);
+        } else if (memTrialType == 3) {
+          memPic = neutralEibImages[neutcounter - 1]; //3 = neut old,,
+          console.log(memPic);
+        } else if (memTrialType == 4) {
+          memPic = neutralFoilImages[neut_foilcounter - 1]; //8 = neut foil,
+          console.log(memPic);
+        }
+    
+        const prompt = `<div style="  display: flex;justify-content: center;"><img src="${memPic}"></div><br>1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - how pleasant would you rate your emotional reaction to these images?`
+    
+        return [
+            {
+              name: "picsPleasant",
+              options: MCHECKAoptions,
+              required: true,
+              prompt: prompt,
+              horizontal: true,
+            },
+          ]
+      },
+    };
 
     var memBlockBreak = {
       type: "html-keyboard-response",
@@ -1983,7 +2003,7 @@
     };
 
     var loop_memTrials = {
-      timeline: [PressSpacebartrial, runFixation, memoryTaskTrials],
+      timeline: [PressSpacebartrial, runFixation, memoryTaskTrials, MemoryReratingTrial],
       loop_function: function () {
         trialNumInBlock++;
         memTrialCounter++;
