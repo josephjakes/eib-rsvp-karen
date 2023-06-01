@@ -116,13 +116,14 @@
 
     var winWidth = 800; //800
 
-    var actualLagTypes = [2, 4]; //Actually only lag 2 [Steve: change this later]
+
+
 
     var focusCheckInterval = 1000;
 
     var itemsPerStream = 16;
 
-    var earliestDistractPosition = 2; // Arrays are zero-indexed, so these are the 3rd and 10th positions - BECAUSE WE ARE ONLY DOING LAG 2! Reduce last position if including longer lags
+    var earliestDistractPosition = 4; // Arrays are zero-indexed, so these are the 3rd and 10th positions - BECAUSE WE ARE ONLY DOING LAG 2! Reduce last position if including longer lags
     var latestDistractPosition = 9;
 
     // This next bit gets the results ID, which will be passed in the parameters in the URL
@@ -183,6 +184,19 @@
       var memConditionsTotal = 4; //1 = neg old 2 =  neg_foils, 3 = neut old, 4 = neut foils.
     }*/
 
+    const actualLagTypes = [2, 4]; //Actually only lag 2 [Steve: change this later]
+    let lag_types_by_trial = []
+    for (let i=0; i < trialsPerDistractCond; i++) {
+      lag_types_by_trial.push(actualLagTypes[0]);
+      lag_types_by_trial.push(actualLagTypes[1]);
+    }
+    for (let i=0; i < trialsPerBaselineType / 2; i++) {
+      lag_types_by_trial.push(actualLagTypes[0]);
+      lag_types_by_trial.push(actualLagTypes[1]);
+    }
+    lag_types_by_trial = jsPsych.randomization.shuffle(lag_types_by_trial);
+
+
     var pracStdDur = [];
     var pracDisDur = [];
 
@@ -205,9 +219,9 @@
     // ******************* COLLATE FILENAMES FOR PRELOADING ******************
     var numStandardImages = 251;
     var numTargetImages = 120; // 120 images, each in left and right configurations
-    var numNegImages = 37;
-    //  28 will be used for the RSVP task and 9 will be used as foils in the memory task, an additional 2 will be shown at beginning with ethics,
-    var numNeutImages = 37; //  24 will be used for the RSVP task and 12 will be used as foils in the memory task,
+    var numNegImages = 50;
+    //  some will be used for the RSVP task and the rest will be used as foils in the memory task, an additional 2 will be shown at beginning with ethics,
+    var numNeutImages = 50; //  some will be used for the RSVP task and the rest will be used as foils in the memory task,
 
     var typeOfBlock = "";
 
@@ -523,7 +537,6 @@
       )
       .map((pic) => pic.stimulus);
 
-    console.log(imageFilenames);
 
     // ******************* CREATE AND SET VARIOUS USEFUL VARIABLES ******************
 
@@ -573,29 +586,31 @@
 
     //then we calculate how many pics we need to have in each of the two piles. We'll then copy them from the (shuffled) pic arrays.
 
-    var maxPicsPerRSVPcond = trialsPerDistractCond * numBlocksTotal; //12 x 2 = 24 pics per pile
+    var maxPicsPerRSVPcond = trialsPerDistractCond * numBlocksTotal; //40 x 2 = 80 pics per pile
 
     shuffleArray(negFilenames);
     shuffleArray(neutFilenames);
 
     //console.log(negFilenames);
 
-    var neg = [];
-    var neut = [];
-    var neg_foil = [];
-    var neut_foil = [];
+    var negativeEibImages = [];
+    var neutralEibImages = [];
+    var negativeFoilImages = [];
+    var neutralFoilImages = [];
 
     for (ii = 0; ii < maxPicsPerRSVPcond; ii++) {
       //copy the first 24 pics to the 0-23 slots of the relevant arrays
-      neg[ii] = negFilenames[ii];
-      neut[ii] = neutFilenames[ii];
+      negativeEibImages[ii] = negFilenames[ii];
+      neutralEibImages[ii] = neutFilenames[ii];
     }
 
     for (kk = 0; kk < numFoilPics; kk++) {
       //copy the next 12 pics to the foil arrays
-      neg_foil[kk] = negFilenames[kk + maxPicsPerRSVPcond];
-      neut_foil[kk] = neutFilenames[kk + maxPicsPerRSVPcond];
+      negativeFoilImages[kk] = negFilenames[kk + maxPicsPerRSVPcond];
+      neutralFoilImages[kk] = neutFilenames[kk + maxPicsPerRSVPcond];
     }
+    console.log('neutral foil images', neutralFoilImages)
+    console.log('negative foil images', negativeFoilImages)
 
     //unfortunately if we want to have break blocks during memory task we are going to need to have counters for all of these stim arrays
     var negcounter = 0;
@@ -633,10 +648,10 @@
         trialDistractType = trialSelector[trialNumInBlock]; // so 1 = negative, 2 = neutral, 3 = baseline.
 
         if (trialDistractType == 1) {
-          distractID = neg[negcounter];
+          distractID = negativeEibImages[negcounter];
           negcounter++;
         } else if (trialDistractType == 2) {
-          distractID = neut[neutcounter];
+          distractID = neutralEibImages[neutcounter];
           neutcounter++;
         } else if (trialDistractType == 3) {
           distractID = standardFilenames[itemsPerStream];
@@ -665,8 +680,11 @@
               (latestDistractPosition + 1 - earliestDistractPosition)
           ));
       },
-      //lag_type: function () {return trialLag = actualLagTypes[lagType[trialSelector[trialNumInBlock]]]},
-      lag_type: 2,
+      lag_type: function () {
+        return lag_types_by_trial[trialNumInBlock]
+      },
+      //return trialLag = actualLagTypes[lagType[trialSelector[trialNumInBlock]]]
+      //lag_type: 2,
       post_trial_gap: 0,
       on_finish: function (trial_data) {
         last_rsvp_time = trial_data.rsvp_time;
@@ -1124,12 +1142,39 @@
       memTrialSelector[ii] = 4;
     } //up to 74
 
-    console.log(memTrialSelector);
-
+    
     // shuffle all the arrays, including the pic arrays that we've already fiddled with and reset the counters where necessary
     shuffleArray(memTrialSelector);
-    shuffleArray(neg);
-    shuffleArray(neut);
+    shuffleArray(negativeEibImages);
+    shuffleArray(neutralEibImages);
+    console.log('memory trail selector:', memTrialSelector);
+    console.log('negative eib images:', negativeEibImages);
+    console.log('neutral eib images:', neutralEibImages);
+
+
+    function get_memory_trial_stimulus() {
+      const memTrialType = memTrialSelector[memTrialCounter];
+      const imageFilePath = ""
+      if (memTrialType == 1) {
+        imageFilePath = negativeEibImages[negcounter]; //1 = neg old
+        console.log(imageFilePath);
+        negcounter++;
+      } else if (memTrialType == 2) {
+        imageFilePath = negativeFoilImages[neg_foilcounter]; //2 = neg_foils
+        console.log(imageFilePath);
+        neg_foilcounter++;
+      } else if (memTrialType == 3) {
+        imageFilePath = neutralEibImages[neutcounter]; //3 = neut old,,
+        console.log(imageFilePath);
+        neutcounter++;
+      } else if (memTrialType == 4) {
+        imageFilePath = neutralFoilImages[neut_foilcounter]; //8 = neut foil,
+        console.log(imageFilePath);
+        neut_foilcounter++;
+      }
+
+      return imageFilePath;
+    }
 
     var memTrialCounter = 0; // this counter does not get reset
 
@@ -1158,19 +1203,19 @@
         memTrialType = memTrialSelector[memTrialCounter];
 
         if (memTrialType == 1) {
-          memPic = neg[negcounter]; //1 = neg old
+          memPic = negativeEibImages[negcounter]; //1 = neg old
           console.log(memPic);
           negcounter++;
         } else if (memTrialType == 2) {
-          memPic = neg_foil[neg_foilcounter]; //2 = neg_foils
+          memPic = negativeFoilImages[neg_foilcounter]; //2 = neg_foils
           console.log(memPic);
           neg_foilcounter++;
         } else if (memTrialType == 3) {
-          memPic = neut[neutcounter]; //3 = neut old,,
+          memPic = neutralEibImages[neutcounter]; //3 = neut old,,
           console.log(memPic);
           neutcounter++;
         } else if (memTrialType == 4) {
-          memPic = neut_foil[neut_foilcounter]; //8 = neut foil,
+          memPic = neutralFoilImages[neut_foilcounter]; //8 = neut foil,
           console.log(memPic);
           neut_foilcounter++;
         }
@@ -1219,7 +1264,7 @@
           '<p style=";margin:10px;">During this experiment, you saw several images that were pleasant. Please read each statement below and select the answer that best represents your OVERALL FEELING to these images. Your answers will remain anonymous and confidential so please be honest.</p>',
         questions: [
           {
-            prompt: `<img src="${imagePath}"><br>1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - how pleasant would you rate your emotional reaction to these images?`,
+            prompt: `<img src="${get_memory_trial_stimulus()}"><br>1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - how pleasant would you rate your emotional reaction to these images?`,
             name: "picsPleasant",
             options: MCHECKAoptions,
             required: true,
@@ -2050,7 +2095,7 @@
 
     var exptTimeline = [];
     if (usingComputer) {
-      
+      /*
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       
@@ -2068,8 +2113,8 @@
       exptTimeline.push(instr_before_prac_loop);
       exptTimeline.push(fadeToBlackTrial);
       exptTimeline.push(loop_practice_trials);
-      
       exptTimeline.push(loop_RSVPBlocks);
+      */
       exptTimeline.push(if_node_nextBlockMemory);
       exptTimeline.push(if_node_memBlock);
       //exptTimeline.push(picResponse);
