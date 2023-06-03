@@ -116,9 +116,6 @@
 
     var winWidth = 800; //800
 
-
-
-
     var focusCheckInterval = 1000;
 
     var itemsPerStream = 16;
@@ -142,9 +139,9 @@
     var quitPlease;
 
     if (realVersion) {
-      var trialsPerDistractCond = 40; //PerBlock How many trials per condition (14 x neut/14 x negative) x 2 blocks 
+      var trialsPerDistractCond = 20; //PerBlock How many trials per condition (14 x neut/14 x negative) x 2 blocks
       var numDistractConditions = 2; // neut and negative in this experiment.
-      var trialsPerBaselineType = 10; // PerBlock How many baseline trials
+      var trialsPerBaselineType = 20; // PerBlock How many baseline trials
       var initialPauseDuration = 1000; // 1000
       var itiDuration = 500; // 500
       var fixationDuration = 500; // 500
@@ -185,17 +182,16 @@
     }*/
 
     const actualLagTypes = [2, 4]; //Actually only lag 2 [Steve: change this later]
-    let lag_types_by_trial = []
-    for (let i=0; i < trialsPerDistractCond; i++) {
+    let lag_types_by_trial = [];
+    for (let i = 0; i < trialsPerDistractCond; i++) {
       lag_types_by_trial.push(actualLagTypes[0]);
       lag_types_by_trial.push(actualLagTypes[1]);
     }
-    for (let i=0; i < trialsPerBaselineType / 2; i++) {
+    for (let i = 0; i < trialsPerBaselineType / 2; i++) {
       lag_types_by_trial.push(actualLagTypes[0]);
       lag_types_by_trial.push(actualLagTypes[1]);
     }
     lag_types_by_trial = jsPsych.randomization.shuffle(lag_types_by_trial);
-
 
     var pracStdDur = [];
     var pracDisDur = [];
@@ -435,25 +431,27 @@
       { stimulus: ts + "IMG221.jpg", data: { pic_type: "Neutral" } },
     ];
 
-    const negFilenames = picStimuli
-      .filter(
-        (stimulus) =>
-          function (stimulus) {
-            return stimulus.data.pic_type === "Positive";
-          }
-      )
-      .map((pic) => pic.stimulus);
+    //const negFilenames = picStimuli
+    //  .filter(
+    //    (stimulus) =>
+    //      function (stimulus) {
+    //        return stimulus.data.pic_type === "Positive";
+    //      }
+    //  )
+    //  .map((pic) => pic.stimulus);
+    //  console.log('positive filenames:',negFilenames)
 
-    const neutFilenames = picStimuli
-      .filter(
-        (stimulus) =>
-          function (stimulus) {
-            return stimulus.data.pic_type === "Neutral";
-          }
-      )
-      .map((pic) => pic.stimulus);
+    //const neutFilenames = picStimuli
+    //  .filter(
+    //    (stimulus) =>
+    //      function (stimulus) {
+    //        return stimulus.data.pic_type === "Neutral";
+    //      }
+    //  )
+    //  .map((pic) => pic.stimulus);
+    //  console.log('neutral filenames:', neutFilenames)
 
-    const eib_neutral_images = [
+    const neutFilenames = [
       "IMG036.jpg",
       "IMG012.jpg",
       "IMG002.jpg",
@@ -496,7 +494,80 @@
       "IMG060.jpg",
     ];
 
-    const eib_positive_images = []
+    const negFilenames = [
+      "IMG125.jpg",
+      "IMG165.jpg",
+      "IMG116.jpg",
+      "IMG097.jpg",
+      "IMG182.jpg",
+      "IMG109.jpg",
+      "IMG129.jpg",
+      "IMG119.jpg",
+      "IMG110.jpg",
+      "IMG143.jpg",
+      "IMG151.jpg",
+      "IMG096.jpg",
+      "IMG152.jpg",
+      "IMG156.jpg",
+      "IMG154.jpg",
+      "IMG131.jpg",
+      "IMG207.jpg",
+      "IMG147.jpg",
+      "IMG117.jpg",
+      "IMG167.jpg",
+      "IMG203.jpg",
+      "IMG181.jpg",
+      "IMG155.jpg",
+      "IMG160.jpg",
+      "IMG205.jpg",
+      "IMG123.jpg",
+      "IMG157.jpg",
+      "IMG094.jpg",
+      "IMG191.jpg",
+      "IMG077.jpg",
+      "IMG201.jpg",
+      "IMG095.jpg",
+      "IMG111.jpg",
+      "IMG132.jpg",
+      "IMG133.jpg",
+      "IMG073.jpg",
+      "IMG209.jpg",
+      "IMG158.jpg",
+      "IMG194.jpg",
+      "IMG107.jpg",
+    ];
+
+    const positiveFoilImages = [
+      "IMG092.jpg",
+      "IMG130.jpg",
+      "IMG153.jpg",
+      "IMG199.jpg",
+      "IMG168.jpg",
+      "IMG192.jpg",
+      "IMG082.jpg",
+      "IMG101.jpg",
+      "IMG127.jpg",
+      "IMG206.jpg",
+    ];
+
+    let neutralFoilImages = [
+      "IMG025.jpg",
+      "IMG066.jpg",
+      "IMG041.jpg",
+      "IMG070.jpg",
+      "IMG069.jpg",
+      "IMG020.jpg",
+      "IMG063.jpg",
+      "IMG039.jpg",
+      "IMG219.jpg",
+      "IMG014.jpg",
+    ];
+
+
+    let negativeFoilImages = positiveFoilImages
+    let neutralEibImages = neutFilenames
+    let positiveEibImages = negFilenames
+
 
     var standardFilenames = [];
     for (ii = 0; ii < numStandardImages; ii++) {
@@ -537,7 +608,6 @@
       )
       .map((pic) => pic.stimulus);
 
-
     // ******************* CREATE AND SET VARIOUS USEFUL VARIABLES ******************
 
     var trialDistractType = 3; //  Initialize as 3 so that all practice trials recorded as baseline type.
@@ -576,8 +646,6 @@
 
     // ******************* SET TRIAL TYPES RSVP******************
 
-    lagType = 2; //it's always 2 in this experiment
-
     // first let's split our negative and neutral distractor pics into two different piles (24 to be used in RSVP and 12 to be used later in the memory task).
     // We want to make sure we have just the right amount of pics in these arrays (then we can sample without replacement and know that they will all be seen).
     // first we calculate how many trials we need of each condition for the distractorID selection (which should be 12 trials per distractor condition, per block for the two distractor conditions).
@@ -588,29 +656,37 @@
 
     var maxPicsPerRSVPcond = trialsPerDistractCond * numBlocksTotal; //40 x 2 = 80 pics per pile
 
-    shuffleArray(negFilenames);
-    shuffleArray(neutFilenames);
+    //shuffleArray(negFilenames);
+    //shuffleArray(neutFilenames);
+
+    jsPsych.randomization.repeat(negFilenames, 1);
+    jsPsych.randomization.repeat(neutFilenames, 1);
 
     //console.log(negFilenames);
 
-    var negativeEibImages = [];
-    var neutralEibImages = [];
-    var negativeFoilImages = [];
-    var neutralFoilImages = [];
+    //var negativeEibImages = [];
+    //var neutralEibImages = [];
+    //var negativeFoilImages = [];
+    //var neutralFoilImages = [];
 
+    console.log("max pictures per rsvp condition:", maxPicsPerRSVPcond);
     for (ii = 0; ii < maxPicsPerRSVPcond; ii++) {
       //copy the first 24 pics to the 0-23 slots of the relevant arrays
-      negativeEibImages[ii] = negFilenames[ii];
+      positiveEibImages[ii] = negFilenames[ii];
       neutralEibImages[ii] = neutFilenames[ii];
     }
 
-    for (kk = 0; kk < numFoilPics; kk++) {
-      //copy the next 12 pics to the foil arrays
-      negativeFoilImages[kk] = negFilenames[kk + maxPicsPerRSVPcond];
-      neutralFoilImages[kk] = neutFilenames[kk + maxPicsPerRSVPcond];
-    }
-    console.log('neutral foil images', neutralFoilImages)
-    console.log('negative foil images', negativeFoilImages)
+    console.log("num foil pics:", numFoilPics);
+    //for (kk = 0; kk < numFoilPics; kk++) {
+    //  //copy the next 12 pics to the foil arrays
+    //  negativeFoilImages[kk] = negFilenames[kk + maxPicsPerRSVPcond];
+    //  neutralFoilImages[kk] = neutFilenames[kk + maxPicsPerRSVPcond];
+    //}
+
+    console.log("neutral foil images", neutralFoilImages);
+    console.log("negative foil images", negativeFoilImages);
+    console.log("neutral eib images", neutralEibImages);
+    console.log("negative eib images", positiveEibImages);
 
     //unfortunately if we want to have break blocks during memory task we are going to need to have counters for all of these stim arrays
     var negcounter = 0;
@@ -629,15 +705,16 @@
     for (ii = trialsPerDistractCond * 2; ii < numTrialsPerBlock; ii++) {
       trialSelector[ii] = 3;
     }
+    console.log("trial selector:", trialSelector);
 
-    shuffleArray(trialSelector);
+    jsPsych.randomization.repeat(trialSelector, 1);
 
     var last_rsvp_time = 0;
 
     var runRSVPtrial = {
       type: "rsvp-sequence",
       stimuli: function () {
-        shuffleArray(standardFilenames);
+        jsPsych.randomization.repeat(standardFilenames, 1);
 
         var stimArray = [];
         for (ii = 0; ii < itemsPerStream + 2; ii++) {
@@ -648,7 +725,7 @@
         trialDistractType = trialSelector[trialNumInBlock]; // so 1 = negative, 2 = neutral, 3 = baseline.
 
         if (trialDistractType == 1) {
-          distractID = negativeEibImages[negcounter];
+          distractID = positiveEibImages[negcounter];
           negcounter++;
         } else if (trialDistractType == 2) {
           distractID = neutralEibImages[neutcounter];
@@ -681,7 +758,7 @@
           ));
       },
       lag_type: function () {
-        return lag_types_by_trial[trialNumInBlock]
+        return lag_types_by_trial[trialNumInBlock];
       },
       //return trialLag = actualLagTypes[lagType[trialSelector[trialNumInBlock]]]
       //lag_type: 2,
@@ -754,7 +831,7 @@
     var runRSVPtrialPractice = {
       type: "rsvp-sequence",
       stimuli: function () {
-        shuffleArray(standardFilenames);
+        jsPsych.randomization.repeat(standardFilenames, 1);
         stimArray = [];
         for (ii = 0; ii < itemsPerStream + 2; ii++) {
           // Extra 2 elements in array hold distractor and target stimuli; these will be moved into position later
@@ -962,7 +1039,7 @@
     var firstRSVPtrialPractice = {
       type: "rsvp-sequence",
       stimuli: function () {
-        shuffleArray(standardFilenames);
+        jsPsych.randomization.repeat(standardFilenames, 1);
         stimArray = [];
         for (ii = 0; ii < 5; ii++) {
           // All elements hold standard stimuli
@@ -1096,7 +1173,7 @@
     var nextBlockMemory = {
       type: "html-keyboard-response",
       stimulus:
-        "<p>You are now finished with the target detection task. <br><br> Next you will complete a slightly different task. <br><br> On each trial you will be shown an image for 1 second. <br><br> Please indicate within 3 seconds whether or not you have seen the image in the previous task by pressing the LEFT arrow key (<) if you have seen the image before or the RIGHT arrow key (>) if you have not seen the image before.<br><br>Press any key to begin</p>",
+        "<p>You are now finished with the target detection task. <br><br> Next you will complete a slightly different task. <br><br> On each trial you will be shown an image for 1 second. <br><br> Please indicate whether or not you have seen the image in the previous task by pressing the LEFT arrow key (<) if you have seen the image before or the RIGHT arrow key (>) if you have not seen the image before.<br><br>Press any key to begin</p>",
       on_finish: function () {
         negcounter = 0; //reset to 0 so that we can show them again in the memory.
         neutcounter = 0;
@@ -1142,41 +1219,14 @@
       memTrialSelector[ii] = 4;
     } //up to 74
 
-    
     // shuffle all the arrays, including the pic arrays that we've already fiddled with and reset the counters where necessary
-    shuffleArray(memTrialSelector);
-    shuffleArray(negativeEibImages);
-    shuffleArray(neutralEibImages);
-    console.log('memory trail selector:', memTrialSelector);
-    console.log('negative eib images:', negativeEibImages);
-    console.log('neutral eib images:', neutralEibImages);
+    console.log("memory trial selector:", memTrialSelector);
+    jsPsych.randomization.repeat(memTrialSelector, 1);
+    jsPsych.randomization.repeat(positiveEibImages, 1);
+    console.log('memory trial positive images')
+    jsPsych.randomization.repeat(neutralEibImages, 1);
+    console.log('memory trial neutral images')
 
-/*
-    function get_memory_trial_stimulus(mem_trial_counter_non_global) {
-      console.log('mem_trial_counter_non_global:', mem_trial_counter_non_global)
-      const memTrialType = memTrialSelector[mem_trial_counter_non_global];
-      let imageFilePath = ""
-      if (memTrialType == 1) {
-        imageFilePath = negativeEibImages[negcounter]; //1 = neg old
-        console.log(imageFilePath);
-        negcounter++;
-      } else if (memTrialType == 2) {
-        imageFilePath = negativeFoilImages[neg_foilcounter]; //2 = neg_foils
-        console.log(imageFilePath);
-        neg_foilcounter++;
-      } else if (memTrialType == 3) {
-        imageFilePath = neutralEibImages[neutcounter]; //3 = neut old,,
-        console.log(imageFilePath);
-        neutcounter++;
-      } else if (memTrialType == 4) {
-        imageFilePath = neutralFoilImages[neut_foilcounter]; //8 = neut foil,
-        console.log(imageFilePath);
-        neut_foilcounter++;
-      }
-
-      return imageFilePath;
-    }
-*/
     var memTrialCounter = 0; // this counter does not get reset
 
     var PressSpacebartrial = {
@@ -1206,7 +1256,7 @@
         console.log(`in memory task trial: memTrialCounter`, memTrialCounter);
 
         if (memTrialType == 1) {
-          memPic = negativeEibImages[negcounter]; //1 = neg old
+          memPic = positiveEibImages[negcounter]; //1 = neg old
           console.log(memPic);
           negcounter++;
         } else if (memTrialType == 2) {
@@ -1267,9 +1317,9 @@
       questions: function () {
         memTrialType = memTrialSelector[memTrialCounter];
         console.log(`in rerating: memTrialCounter`, memTrialCounter);
-    
+
         if (memTrialType == 1) {
-          memPic = negativeEibImages[negcounter - 1]; //1 = neg old
+          memPic = positiveEibImages[negcounter - 1]; //1 = neg old
           console.log(memPic);
         } else if (memTrialType == 2) {
           memPic = negativeFoilImages[neg_foilcounter - 1]; //2 = neg_foils
@@ -1281,18 +1331,18 @@
           memPic = neutralFoilImages[neut_foilcounter - 1]; //8 = neut foil,
           console.log(memPic);
         }
-    
-        const prompt = `<div style="  display: flex;justify-content: center;"><img src="${memPic}"></div><br>1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - how pleasant would you rate your emotional reaction to these images?`
-    
+
+        const prompt = `<div style="  display: flex;justify-content: center;"><img src="${memPic}"></div><br>1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - How positive would you rate that image?`;
+
         return [
-            {
-              name: "picsPleasant",
-              options: MCHECKAoptions,
-              required: true,
-              prompt: prompt,
-              horizontal: true,
-            },
-          ]
+          {
+            name: "picsPleasant",
+            options: MCHECKAoptions,
+            required: true,
+            prompt: prompt,
+            horizontal: true,
+          },
+        ];
       },
     };
 
@@ -1558,8 +1608,6 @@
     };
     //**************Picture graphic/arousing questions**********************
 
-    var MCHECKAoptions = ["1.", "2", "3", "4", "5", "6", "7", "8", "9."];
-
     // please edit the preamble and the prompts. The name should just be the num of the question.
     var picResponse = {
       type: "survey-multi-choice",
@@ -1568,7 +1616,7 @@
       questions: [
         {
           prompt:
-            "1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - how pleasant would you rate your emotional reaction to these images?",
+            "1. Using the scale below where 1 is PLEASANT, 5 is NEUTRAL and 9 is UNPLEASANT - How positive would you rate that image?",
           name: "picsPleasant",
           options: MCHECKAoptions,
           required: true,
@@ -1837,10 +1885,6 @@
         "           As long as you finish the experiment you will get SONA credit no matter what you put here," +
         "           so please be honest.<br><br>",
       html:
-        //`<form>` +
-        //`<fieldset>` +
-        //'</fieldset>`
-        //`<fieldset>` +
         '           <label for="gender"><b>Gender: &nbsp;</b></label>' +
         '           <input type="radio" name="gender" value="male" /> Male &nbsp; ' +
         '           <input type="radio" name="gender" value="female" /> Female &nbsp;' +
@@ -1851,14 +1895,10 @@
         `<div><label for='haveADHD'>Do you currently have a diagnosis of ADHD?</label><br><input name='haveADHD' type='radio' value="yes">Yes</input></div>` +
         `<div><input type='radio' name='haveADHD' value=no>No</input></div>` +
         `<div><input type='radio' name='haveADHD' value="prefer-not-to-say">Prefer not to say</div><br>` +
-        //`</fieldset>` +
-        //`<fieldset>` +
         `<div><label for='isMedicatedForADHD'>If so, are you currently taking medication for ADHD?</label>` +
         `<div><input type='radio' name='isMedicatedForADHD' value="yes">Yes</input></div>` +
         `<div><input type='radio' name='isMedicatedForADHD' value="no">No</input></div><br>` +
         `<div><input type='radio' name='isMedicatedForADHD' value="prefer-not-to-say">Prefer not to say</input></div><br>`,
-      //`</fieldset>` +
-      //`</form>`
     };
 
     // ******************* MAIN LOOPS ******************
@@ -1868,11 +1908,7 @@
 
       loop_function: function () {
         trialNumInBlock++;
-        if (trialNumInBlock < numTrialsPerBlock && quitButtonCount < 1) {
-          return true;
-        } else {
-          return false;
-        }
+        return !!(trialNumInBlock < numTrialsPerBlock && quitButtonCount < 1);
       },
     };
 
@@ -1881,24 +1917,23 @@
       loop_function: function () {
         blockNum++;
         trialNumInBlock = 0;
-        if (blockNum < numBlocksTotal && quitButtonCount < 1) {
-          return true;
-        } else {
-          return false;
-        }
+        return !!(blockNum < numBlocksTotal && quitButtonCount < 1);
       },
     };
 
     var loop_memTrials = {
-      timeline: [PressSpacebartrial, runFixation, memoryTaskTrials, MemoryReratingTrial],
+      timeline: [
+        PressSpacebartrial,
+        runFixation,
+        memoryTaskTrials,
+        MemoryReratingTrial,
+      ],
       loop_function: function () {
         trialNumInBlock++;
         memTrialCounter++;
-        if (trialNumInBlock < numTrialsPerMemBlock && quitButtonCount < 1) {
-          return true;
-        } else {
-          return false;
-        }
+        return !!(
+          trialNumInBlock < numTrialsPerMemBlock && quitButtonCount < 1
+        );
       },
     };
 
@@ -1906,11 +1941,7 @@
       // No block break after final memory block
       timeline: [memBlockBreak],
       conditional_function: function () {
-        if (memBlockNum == 3 || quitButtonCount == 1) {
-          return false;
-        } else {
-          return true;
-        }
+        return !(memBlockNum == 3 || quitButtonCount == 1);
       },
     };
 
@@ -1919,11 +1950,7 @@
       loop_function: function () {
         memBlockNum++;
         trialNumInBlock = 0;
-        if (memBlockNum < numMemBlocks && quitButtonCount < 1) {
-          return true;
-        } else {
-          return false;
-        }
+        return !!(memBlockNum < numMemBlocks && quitButtonCount < 1);
       },
     };
     var if_node_memBlock = {
@@ -2002,7 +2029,7 @@
 
     var exptTimeline = [];
     if (usingComputer) {
-      exptTimeline.push(welcome1);
+      /*exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       
       exptTimeline.push({
@@ -2019,7 +2046,9 @@
       exptTimeline.push(instr_before_prac_loop);
       exptTimeline.push(fadeToBlackTrial);
       exptTimeline.push(loop_practice_trials);
+      */
       exptTimeline.push(loop_RSVPBlocks);
+      /*
       exptTimeline.push(if_node_nextBlockMemory);
       exptTimeline.push(if_node_memBlock);
       //exptTimeline.push(picResponse);
@@ -2030,6 +2059,7 @@
         type: "fullscreen",
         fullscreen_mode: false,
       });
+    */
     } else {
       exptTimeline.push(using_mobile_device);
     }
