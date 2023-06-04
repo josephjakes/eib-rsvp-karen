@@ -1650,14 +1650,23 @@
 
     function calculateSubscaleScore(subscale) {
       let subscaleScore = 0;
+      let question_not_answered_flag = false;
       for (const question_key of subscale) {
         const responses_object = JSON.parse(
           jsPsych.data.get().last().values()[0]["responses"]
         );
         const target_question_response = responses_object[question_key];
+        if (target_question_response == "") {
+          question_not_answered_flag = true;
+          break;
+        }
         subscaleScore += target_question_response;
       }
-      return subscaleScore;
+      if (question_not_answered_flag) {
+        return "Not all questions were answered";
+      } else {
+        return subscaleScore;
+      }
     }
 
     const item_1_preamble = `Please read each statement and select the answer which indicates how much the statement
