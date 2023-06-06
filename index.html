@@ -714,7 +714,13 @@
           ));
       },
       lag_type: function () {
+        console.log(`trialNumInBlock: ${trialNumInBlock}`)
+        console.log(`lag_types_by_trial: ${lag_types_by_trial}`)
+        console.log(`lag_types_by_trial[trialNumInBlock]: ${lag_types_by_trial[trialNumInBlock]}`)
         return lag_types_by_trial[trialNumInBlock];
+      },
+      trialLag: function () {
+        return trialLag = lag_types_by_trial[trialNumInBlock]
       },
       //return trialLag = actualLagTypes[lagType[trialSelector[trialNumInBlock]]]
       //lag_type: 2,
@@ -773,7 +779,7 @@
           trialNum: trialNumInBlock + 1,
           trialDistractType: trialDistractType,
           trialDistractPos: trialDistractPos,
-          trialLag: trialLag,
+          trialLag: lag_types_by_trial[trialNumInBlock],
           RSVPtrialResp: RSVPresp,
           RSVPTrialCorrect: trialCorrect,
           trialTargetType: trialTargetType,
@@ -1284,7 +1290,9 @@
         }
 
         //const basic_style = `display: flex; justify-content: center; text-align: center; margin: auto !important;`
-        const prompt = `<div ><img src="${memPic}"></div><br><div>How positive would you rate your emotional reaction to that image?</div><div>(These images are meant to be positive or neutral, but you also have the option to say you had a negative reaction.)</div>`;
+        const prompt = `<div>How positive would you rate your emotional reaction to that image?</div><div>(These images are meant to be positive or neutral, but you also have the option to say you had a negative reaction.)</div>`;
+        const stimulus = memPic;
+
 
         const MCHECKAoptions = ["1 Very Negative", "2", "3", "4", "5 Neutral", "6", "7", "8", "9 Very Positive"];
         
@@ -1524,7 +1532,7 @@
         ";margin:" +
         mWidth +
         ';">' +
-        '			Please keep a copy of this information sheet (you can download the pdf <a href="Written-debrief.pdf" target="_blank">here</a>).<br>' +
+        '			Please keep a copy of this information sheet (you can download the pdf <a href="./resources/pdfs/written-debrief.pdf" target="_blank">here</a>).<br>' +
         "			<br>" +
         '			<p style="text-align:center;"><b>PARTICIPANT CONFIRMATION</b></p>' +
         '			<p style="text-align:center;font-size:' +
@@ -1652,7 +1660,7 @@
           jsPsych.data.get().last().values()[0]["responses"]
         );
         const target_question_response = responses_object[question_key];
-        if (target_question_response == "") {
+        if (target_question_response === "") {
           question_not_answered_flag = true;
           break;
         }
@@ -1955,6 +1963,7 @@
 
     var exptTimeline = [];
     if (usingComputer) {
+      /*
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       
@@ -1972,11 +1981,11 @@
       exptTimeline.push(instr_before_prac_loop);
       exptTimeline.push(fadeToBlackTrial);
       exptTimeline.push(loop_practice_trials);
+      */
       exptTimeline.push(loop_RSVPBlocks);
       exptTimeline.push(if_node_nextBlockMemory);
       exptTimeline.push(if_node_memBlock);
       exptTimeline.push(participantDifferencesSurveyTrial);
-      //exptTimeline.push(if_node_picQDemo);
       exptTimeline.push(debrief); //save data here.
       exptTimeline.push({
         type: "fullscreen",
