@@ -714,13 +714,15 @@
           ));
       },
       lag_type: function () {
-        console.log(`trialNumInBlock: ${trialNumInBlock}`)
-        console.log(`lag_types_by_trial: ${lag_types_by_trial}`)
-        console.log(`lag_types_by_trial[trialNumInBlock]: ${lag_types_by_trial[trialNumInBlock]}`)
+        console.log(`trialNumInBlock: ${trialNumInBlock}`);
+        console.log(`lag_types_by_trial: ${lag_types_by_trial}`);
+        console.log(
+          `lag_types_by_trial[trialNumInBlock]: ${lag_types_by_trial[trialNumInBlock]}`
+        );
         return lag_types_by_trial[trialNumInBlock];
       },
       trialLag: function () {
-        return trialLag = lag_types_by_trial[trialNumInBlock]
+        return (trialLag = lag_types_by_trial[trialNumInBlock]);
       },
       //return trialLag = actualLagTypes[lagType[trialSelector[trialNumInBlock]]]
       //lag_type: 2,
@@ -1114,7 +1116,11 @@
 
         if (blockNum > 0) {
           tempTextHTML +=
-            "<p>You're doing well!</p><p>"
+            "<p>You're doing well!</p><p>" +
+            blockNum +
+            " of " +
+            numBlocksTotal +
+            " blocks completed</p>"; //[STEVE: HERE IS WHERE YOU SAY THAT IMAGES ARE FAKE (FOR ALICE)]
           tempTextHTML += reminderText;
         } //[DON'T NEED THIS, DELETE]
         else if (blockNum == 0) {
@@ -1268,7 +1274,6 @@
       },
     };
 
-
     var MemoryReratingTrial = {
       type: "survey-likert",
       questions: function () {
@@ -1293,16 +1298,25 @@
         const prompt = `<div>How positive would you rate your emotional reaction to that image?</div><div>(These images are meant to be positive or neutral, but you also have the option to say you had a negative reaction.)</div>`;
         const stimulus = memPic;
 
+        const MCHECKAoptions = [
+          "1 Very Negative",
+          "2",
+          "3",
+          "4",
+          "5 Neutral",
+          "6",
+          "7",
+          "8",
+          "9 Very Positive",
+        ];
 
-        const MCHECKAoptions = ["1 Very Negative", "2", "3", "4", "5 Neutral", "6", "7", "8", "9 Very Positive"];
-        
         const questions = {
           name: "picsPleasant",
           prompt: prompt,
           horizontal: true,
           labels: MCHECKAoptions,
-        }
-        console.log('questions', questions)
+        };
+        console.log("questions", questions);
         return [questions];
       },
     };
@@ -1310,12 +1324,7 @@
     var memBlockBreak = {
       type: "html-keyboard-response",
       stimulus: function () {
-        var tempTextHTML =
-          "<p>You're doing well!</p><p>" +
-          (memBlockNum + 1) +
-          " of " +
-          numMemBlocks +
-          " blocks completed</p>";
+        var tempTextHTML = "<p>You're doing well!</p><p>";
         tempTextHTML +=
           "<br><p>Press any key when you are ready to continue</p>";
 
@@ -1965,10 +1974,10 @@
     if (usingComputer) {
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
-      
+
       exptTimeline.push({
-          type: "fullscreen",
-          fullscreen_mode: true,
+        type: "fullscreen",
+        fullscreen_mode: true,
       });
       exptTimeline.push(NEURinstruction);
       exptTimeline.push(dass21);
