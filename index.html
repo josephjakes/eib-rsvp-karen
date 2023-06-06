@@ -1295,8 +1295,7 @@
         }
 
         //const basic_style = `display: flex; justify-content: center; text-align: center; margin: auto !important;`
-        const prompt = `<div>How positive would you rate your emotional reaction to that image?</div><div>(These images are meant to be positive or neutral, but you also have the option to say you had a negative reaction.)</div>`;
-        const stimulus = memPic;
+        const prompt = `<div ><img src="${memPic}"></div><br><div>How positive would you rate your emotional reaction to that image?</div><div>(These images are meant to be positive or neutral, but you also have the option to say you had a negative reaction.)</div>`;
 
         const MCHECKAoptions = [
           "1 Very Negative",
@@ -1319,6 +1318,11 @@
         console.log("questions", questions);
         return [questions];
       },
+      on_finish: function (trial_data) {
+        jsPsych.data.addDataToLastTrial({
+          stimulus: memPic,
+        })
+      }
     };
 
     var memBlockBreak = {
@@ -1541,7 +1545,7 @@
         ";margin:" +
         mWidth +
         ';">' +
-        '			Please keep a copy of this information sheet (you can download the pdf <a href="./resources/pdfs/written-debrief.pdf" target="_blank">here</a>).<br>' +
+        '			Please keep a copy of this information sheet (you can download the pdf <a href="./resources/pdfs/written-debrief.pdf" download>here</a>).<br>' +
         "			<br>" +
         '			<p style="text-align:center;"><b>PARTICIPANT CONFIRMATION</b></p>' +
         '			<p style="text-align:center;font-size:' +
@@ -1972,6 +1976,7 @@
 
     var exptTimeline = [];
     if (usingComputer) {
+      /*
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
 
@@ -1990,6 +1995,7 @@
       exptTimeline.push(fadeToBlackTrial);
       exptTimeline.push(loop_practice_trials);
       exptTimeline.push(loop_RSVPBlocks);
+      */
       exptTimeline.push(if_node_nextBlockMemory);
       exptTimeline.push(if_node_memBlock);
       exptTimeline.push(participantDifferencesSurveyTrial);
