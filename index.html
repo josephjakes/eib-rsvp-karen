@@ -106,7 +106,7 @@
     var dateTime = date + " " + time;
 
     var realVersion = true;
-    var jatosVersion = false;
+    var jatosVersion = true;
     //var instructVersion = Math.round(Math.random()); // 0 = no instructions and 1 = given fake/staged instructions
     //console.log(instructVersion);
 
@@ -1976,7 +1976,6 @@
 
     var exptTimeline = [];
     if (usingComputer) {
-      /*
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       exptTimeline.push({
@@ -1996,7 +1995,6 @@
       exptTimeline.push(loop_RSVPBlocks);
       exptTimeline.push(if_node_nextBlockMemory);
       exptTimeline.push(if_node_memBlock);
-      */
       exptTimeline.push(participantDifferencesSurveyTrial);
       exptTimeline.push(debrief); //save data here.
       exptTimeline.push({
@@ -2034,38 +2032,18 @@
       });
     } else {
       jatos.onLoad(function () {
-        /* start the experiment with jatos wrapping AND set up the Prolific talk back*/
-        // ---------- subject info ----------
-        //var prolific_id = jatos.urlQueryParameters.PROLIFIC_PID; //
-        //var completion_url = "https://app.prolific.co/submissions/complete?cc=CDUKJ5BN";
-        /*
-        var finish_msg =
-          'All done! Please click <a href="' +
-          completion_url +
-          '">here</a> to be returned to Prolific and receive your completion code notification.';
-          
-        // record the subject Num in the jsPsych data (adds property to every trial)
-        jsPsych.data.addProperties({
-          prolificID: prolific_id,
-        });
-        */
-
+        const sona_id =  jatos.urlQueryParameters.pID;
+        var completion_url = `https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experimen&survey_code=${sona_id}`;
+        var finish_msg = `All done! Please click <a href="${completion_url}">here</a> to be returned to Sona and receive your credit`;
         jsPsych.init({
-          preload_images: imageFilenames,
-          display_element: jspsychTargetMLP,
-          timeline: exptTimeline,
-          on_finish: function () {
-            var results = jsPsych.data
-              .get()
-              .ignore(["internal_node_id", "button_pressed"])
-              .csv();
-            jatos.submitResultData(results);
-            document.write(
-              '<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; 						width:800px; float:right"><p><br><br><br>' +
-                finish_msg +
-                "</p></div></div>"
-            );
-          },
+              preload_images: imageFilenames,
+              display_element: jspsychTargetMLP,
+              timeline: exptTimeline,
+        on_finish: function() {
+          var results = jsPsych.data.get().ignore(['internal_node_id','button_pressed']).csv();
+          jatos.submitResultData(results);
+          document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; 						width:800px; float:right"><p><br><br><br>' +finish_msg +'</p></div></div>')
+          }
         });
       });
     }
