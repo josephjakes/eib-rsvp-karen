@@ -2033,7 +2033,7 @@
     } else {
       jatos.onLoad(function () {
         const sona_id =  jatos.urlQueryParameters.pID;
-        var completion_url = `https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experimen&survey_code=${sona_id}`;
+        var completion_url = `https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=2007&credit_token=756a4fd70a1b49eb8e1907937d9e8efa&survey_code=${sona_id}`;
         var finish_msg = `All done! Please click <a href="${completion_url}">here</a> to be returned to Sona and receive your credit`;
         jsPsych.init({
               preload_images: imageFilenames,
