@@ -2007,13 +2007,11 @@
     }
 
     // record the subject Num and the counterbalance condition in the jsPsych data object (adds property to every trial)
-    /*
     jsPsych.data.addProperties({
       subNum: subject_id,
       DateTime: dateTime,
       toldFakeGroup1Yes0No: instructVersion,
     });
-    */
     if (jatosVersion == false) {
       //start the experiment without jatos wrapping
       jsPsych.init({
