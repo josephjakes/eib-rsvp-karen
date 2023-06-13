@@ -2010,7 +2010,6 @@
     jsPsych.data.addProperties({
       subNum: subject_id,
       DateTime: dateTime,
-      toldFakeGroup1Yes0No: instructVersion,
     });
     if (jatosVersion == false) {
       //start the experiment without jatos wrapping
@@ -2020,6 +2019,9 @@
         experiment_width: 900,
         timeline: exptTimeline,
         on_finish: function () {
+          jsPsych.data.addProperties({
+            sona_id: sona_id,
+          });
           jsPsych.data
             .get()
             .ignore(["internal_node_id"])
