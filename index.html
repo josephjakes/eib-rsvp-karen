@@ -160,7 +160,7 @@
       var numFoilPics = 10; //This is per emotion condition - so 9 negative + 9 neutral pics left over to act as foils in the memory task [STEVE: CHANGE THIS AS APPROPRIATE FOR MEMORY TEST]
       var memConditionsTotal = 4; //1 = neg old 2 =  neg_foils, 3 = neut old, 4 = neut foils.
     }
-    /*else {
+    else {
       var trialsPerDistractCond = 4; //PerBlock How many trials per condition (neut/negative)
       var numDistractConditions = 2; // neut and negative in this experiment
       var trialsPerBaselineType = 2; // PerBlock How many baseline trials
@@ -180,19 +180,33 @@
       var numMemPics = 8; //so 8 each of neg/neutral x old/new
       var numFoilPics = 8; // use 24 negative and 24 neutral pics as foils
       var memConditionsTotal = 4; //1 = neg old 2 =  neg_foils, 3 = neut old, 4 = neut foils.
-    }*/
+    }
 
     const actualLagTypes = [2, 4]; //Actually only lag 2 [Steve: change this later]
-    let lag_types_by_trial = [];
-    for (let i = 0; i < trialsPerDistractCond; i++) {
-      lag_types_by_trial.push(actualLagTypes[0]);
-      lag_types_by_trial.push(actualLagTypes[1]);
+
+    // balance lag types across each trial condition
+    let lag_types_for_emotive_trials = [];
+    let lag_types_for_neutral_trials = [];
+    for (let i = 0; i < trialsPerDistractCond / 2; i++) {
+      lag_types_for_emotive_trials.push(actualLagTypes[0]);
+      lag_types_for_emotive_trials.push(actualLagTypes[1]);
+      lag_types_for_neutral_trials.push(actualLagTypes[0]);
+      lag_types_for_neutral_trials.push(actualLagTypes[1]);
     }
+    lag_types_for_emotive_trials = jsPsych.randomization.shuffle(
+      lag_types_for_emotive_trials
+    );
+    lag_types_for_neutral_trials = jsPsych.randomization.shuffle(
+      lag_types_for_neutral_trials
+    );
+
+    let lag_types_for_baseline_trials = [];
     for (let i = 0; i < trialsPerBaselineType / 2; i++) {
-      lag_types_by_trial.push(actualLagTypes[0]);
-      lag_types_by_trial.push(actualLagTypes[1]);
+     lag_types_for_baseline_trials.push(actualLagTypes[0]); 
     }
-    lag_types_by_trial = jsPsych.randomization.shuffle(lag_types_by_trial);
+    lag_types_for_baseline_trials = jsPsych.randomization.shuffle(
+      lag_types_for_baseline_trials
+    );
 
     var pracStdDur = [];
     var pracDisDur = [];
@@ -715,15 +729,17 @@
           ));
       },
       lag_type: function () {
+
         console.log(`trialNumInBlock: ${trialNumInBlock}`);
-        console.log(`lag_types_by_trial: ${lag_types_by_trial}`);
-        console.log(
-          `lag_types_by_trial[trialNumInBlock]: ${lag_types_by_trial[trialNumInBlock]}`
-        );
-        return lag_types_by_trial[trialNumInBlock];
-      },
-      trialLag: function () {
-        return (trialLag = lag_types_by_trial[trialNumInBlock]);
+        if (trialDistractType == 1) {
+          return lag_types_for_emotive_trials[trialNumInBlock / 2]
+        } else if (trialDistractType == 2) {
+          return lag_types_for_neutral_trials[trialNumInBlock / 2]
+        } else if (trialDistractType == 3) {
+          return "baseline"
+        } else {
+          console.log("unknown trial distract type")
+        }
       },
       //return trialLag = actualLagTypes[lagType[trialSelector[trialNumInBlock]]]
       //lag_type: 2,
@@ -775,14 +791,26 @@
           trialCorrect = 0;
         }
 
+        let trialLag;
+        if (trialDistractType == 1) {
+          trialLag = lag_types_for_emotive_trials[trialNumInBlock / 2]
+        } else if (trialDistractType == 2) {
+          trialLag = lag_types_for_neutral_trials[trialNumInBlock / 2]
+        } else if (trialDistractType == 3) {
+          trialLag = "baseline"
+        } else {
+          console.log("unknown trial distract type")
+        }
+
+        console.log(`blockType: ${typeOfBlock}`)
         jsPsych.data.addDataToLastTrial({
           exptPhase: exptPhase,
           blockNum: blockNum + 1,
-          blockType: typeOfBlock,
+          blockType: "EIB",
           trialNum: trialNumInBlock + 1,
           trialDistractType: trialDistractType,
           trialDistractPos: trialDistractPos,
-          trialLag: lag_types_by_trial[trialNumInBlock],
+          trialLag: trialLag,
           RSVPtrialResp: RSVPresp,
           RSVPTrialCorrect: trialCorrect,
           trialTargetType: trialTargetType,
@@ -863,6 +891,7 @@
           trialCorrect = 0;
         }
 
+        console.log(`blockType: ${blockType}`)
         jsPsych.data.addDataToLastTrial({
           exptPhase: exptPhase,
           blockNum: blockNum + 1,
@@ -1103,6 +1132,7 @@
       type: "html-keyboard-response",
       stimulus: function () {
         typeOfBlock = "EIB";
+        console.log("setting type of block:", typeOfBlock);
         var tempTextHTML = " ";
         var reminderText = " ";
 
@@ -1260,12 +1290,12 @@
         }
         memPic = trial_data.stimulus;
         exptPhase = 2;
-        typeOfBlock = "memoryTask";
 
+        console.log(`blockType: ${typeOfBlock}`)
         jsPsych.data.addDataToLastTrial({
           exptPhase: exptPhase,
           blockNum: memBlockNum + 1,
-          blockType: typeOfBlock,
+          blockType: "memoryTask",
           trialNum: trialNumInBlock + 1,
           trialCond: memTrialType,
           distractID: memPic,
@@ -1322,6 +1352,7 @@
       on_finish: function (trial_data) {
         jsPsych.data.addDataToLastTrial({
           stimulus: memPic,
+          blockType: "memoryRerating",
         })
       }
     };
@@ -2019,9 +2050,6 @@
         experiment_width: 900,
         timeline: exptTimeline,
         on_finish: function () {
-          jsPsych.data.addProperties({
-            sona_id: sona_id,
-          });
           jsPsych.data
             .get()
             .ignore(["internal_node_id"])
@@ -2041,6 +2069,9 @@
               display_element: jspsychTargetMLP,
               timeline: exptTimeline,
         on_finish: function() {
+          jsPsych.data.addProperties({
+            sona_id: sona_id,
+          });
           var results = jsPsych.data.get().ignore(['internal_node_id','button_pressed']).csv();
           jatos.submitResultData(results);
           document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; 						width:800px; float:right"><p><br><br><br>' +finish_msg +'</p></div></div>')
