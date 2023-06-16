@@ -187,7 +187,7 @@
     // balance lag types across each trial condition
     let lag_types_for_emotive_trials = [];
     let lag_types_for_neutral_trials = [];
-    for (let i = 0; i < trialsPerDistractCond / 2; i++) {
+    for (let i = 0; i < trialsPerDistractCond; i++) {
       lag_types_for_emotive_trials.push(actualLagTypes[0]);
       lag_types_for_emotive_trials.push(actualLagTypes[1]);
       lag_types_for_neutral_trials.push(actualLagTypes[0]);
@@ -199,6 +199,8 @@
     lag_types_for_neutral_trials = jsPsych.randomization.shuffle(
       lag_types_for_neutral_trials
     );
+    console.log(`lag_types_for_emotive_trials: ${lag_types_for_emotive_trials}`)
+    console.log(`lag_types_for_neutral_trials: ${lag_types_for_neutral_trials}`)
 
     let lag_types_for_baseline_trials = [];
     for (let i = 0; i < trialsPerBaselineType / 2; i++) {
@@ -695,13 +697,13 @@
 
         trialDistractType = trialSelector[trialNumInBlock]; // so 1 = negative, 2 = neutral, 3 = baseline.
 
-        if (trialDistractType == 1) {
+        if (trialDistractType === 1) {
           distractID = positiveEibImages[negcounter];
           negcounter++;
-        } else if (trialDistractType == 2) {
+        } else if (trialDistractType === 2) {
           distractID = neutralEibImages[neutcounter];
           neutcounter++;
-        } else if (trialDistractType == 3) {
+        } else if (trialDistractType === 3) {
           distractID = standardFilenames[itemsPerStream];
         }
 
@@ -732,9 +734,13 @@
 
         console.log(`trialNumInBlock: ${trialNumInBlock}`);
         if (trialDistractType == 1) {
-          return lag_types_for_emotive_trials[trialNumInBlock / 2]
+          console.log(`lag_types_for_emotive_trials: ${lag_types_for_emotive_trials}`)
+          console.log(`negcounter: ${negcounter}`)
+          return lag_types_for_emotive_trials[negcounter - 1]
         } else if (trialDistractType == 2) {
-          return lag_types_for_neutral_trials[trialNumInBlock / 2]
+          console.log(`lag_types_for_neutral_trials: ${lag_types_for_neutral_trials}`)
+          console.log(`neutcounter: ${neutcounter}`)
+          return lag_types_for_neutral_trials[neutcounter - 1]
         } else if (trialDistractType == 3) {
           return "baseline"
         } else {
@@ -791,18 +797,17 @@
           trialCorrect = 0;
         }
 
-        let trialLag;
-        if (trialDistractType == 1) {
-          trialLag = lag_types_for_emotive_trials[trialNumInBlock / 2]
-        } else if (trialDistractType == 2) {
-          trialLag = lag_types_for_neutral_trials[trialNumInBlock / 2]
+        let trial_lag = 'unintialised';
+        if (trialDistractType === 1) {
+          trial_lag = lag_types_for_emotive_trials[negcounter - 1]
+        } else if (trialDistractType === 2) {
+          trial_lag = lag_types_for_neutral_trials[neutcounter - 1]
         } else if (trialDistractType == 3) {
-          trialLag = "baseline"
+          trial_lag = "baseline"
         } else {
           console.log("unknown trial distract type")
         }
 
-        console.log(`blockType: ${typeOfBlock}`)
         jsPsych.data.addDataToLastTrial({
           exptPhase: exptPhase,
           blockNum: blockNum + 1,
@@ -810,7 +815,7 @@
           trialNum: trialNumInBlock + 1,
           trialDistractType: trialDistractType,
           trialDistractPos: trialDistractPos,
-          trialLag: trialLag,
+          trialLag: trial_lag,
           RSVPtrialResp: RSVPresp,
           RSVPTrialCorrect: trialCorrect,
           trialTargetType: trialTargetType,
@@ -818,6 +823,8 @@
           targetID: targetID,
           rsvp_time: last_rsvp_time,
         });
+        console.log(`adding trialLag to block: ${trial_lag}`)
+        console.log(`trialdistracttype: ${trialDistractType}`)
       },
     };
 
@@ -891,11 +898,10 @@
           trialCorrect = 0;
         }
 
-        console.log(`blockType: ${blockType}`)
         jsPsych.data.addDataToLastTrial({
           exptPhase: exptPhase,
           blockNum: blockNum + 1,
-          blockType: typeOfBlock,
+          blockType: "Prac",
           trialNum: trialNumInBlock + 1,
           trialDistractType: trialDistractType,
           trialDistractPos: trialDistractPos,
@@ -1291,7 +1297,6 @@
         memPic = trial_data.stimulus;
         exptPhase = 2;
 
-        console.log(`blockType: ${typeOfBlock}`)
         jsPsych.data.addDataToLastTrial({
           exptPhase: exptPhase,
           blockNum: memBlockNum + 1,
@@ -1353,6 +1358,7 @@
         jsPsych.data.addDataToLastTrial({
           stimulus: memPic,
           blockType: "memoryRerating",
+          result: JSON.parse(trial_data["responses"]).picsPleasant,
         })
       }
     };
@@ -2008,6 +2014,7 @@
 
     var exptTimeline = [];
     if (usingComputer) {
+      /*
       exptTimeline.push(welcome1);
       exptTimeline.push(welcome2);
       exptTimeline.push({
@@ -2025,6 +2032,7 @@
       exptTimeline.push(fadeToBlackTrial);
       exptTimeline.push(loop_practice_trials);
       exptTimeline.push(loop_RSVPBlocks);
+      */
       exptTimeline.push(if_node_nextBlockMemory);
       exptTimeline.push(if_node_memBlock);
       exptTimeline.push(participantDifferencesSurveyTrial);
