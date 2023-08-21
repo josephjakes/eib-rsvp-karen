@@ -1434,7 +1434,7 @@
         mWidth +
         ';">' +
         "			<b>1. What is the research study about?</b><br>" +
-        "		You are invited to take part in this research study. The research study aims to investigate factors that influence how people process rapidly presented targets. You have been invited because you are a student taking introductory psychology at UNSW and because you completed pre-screening questionnaires at the start of the year.<br><br>" +
+        "		You are invited to take part in this research study. The research study aims to investigate factors that influence how people process rapidly presented targets. You have been invited because you are a registered user of Prolific.<br><br>" +
         "			<b>2. Who is conducting this research? </b><br>" +
         "		The study is being carried out by the following researchers: Steven Most and Karen Coad, UNSW School of Psychology.<br>" +
         "		Research Funder: This research is not being funded by any outside agency. <br><br>" +
@@ -1464,7 +1464,7 @@
         "	<b>6. Total participation time </b><br>" +
         "		In total, participation in this study will require approximately 30 minutes online. <br><br>" +
         "	<b>7. Recompense to participants </b><br>" +
-        "		You will receive 0.5 SONA credits as recompense for your participation.<br><br>" +
+        "		You will be compensated at a rate of GBP £12/hr for your participation. As this experiment should be completed within 30 minutes, you will receive GBP £6. <br><br>" +
         "	<b>8. What are the possible benefits to participation?</b><br>" +
         "		We cannot promise that you will receive any benefits from this study, but we hope to use the findings from this study to build on previous research exploring how different groups of people process visual information. <br><br>" +
         "	<b>9. What will happen to information about me?</b><br>" +
@@ -2068,8 +2068,9 @@
     } else {
       jatos.onLoad(function () {
         const sona_id =  jatos.urlQueryParameters.pID;
-        var completion_url = `https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=2007&credit_token=756a4fd70a1b49eb8e1907937d9e8efa&survey_code=${sona_id}`;
-        var finish_msg = `All done! Please click <a href="${completion_url}">here</a> to be returned to Sona and receive your credit`;
+        // var completion_url = `https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=2007&credit_token=756a4fd70a1b49eb8e1907937d9e8efa&survey_code=${sona_id}`;
+        const completion_url = "https://app.prolific.co/submissions/complete?cc=C1KE4T0T"
+        var finish_msg = `All done! Please click <a href="${completion_url}">here</a> to be returned to Prolific and receive your credit`;
         jsPsych.init({
               preload_images: imageFilenames,
               display_element: jspsychTargetMLP,
