@@ -1850,7 +1850,7 @@
         '            <p style="text-align:left;font-size:110%"><b>Demographic information:</b></p>' +
         '			<p style="text-align:left;">You are nearly finished! We need the following information for our records.' +
         //"			is kept completely separate from information about your Prolfic account." +
-        "           As long as you finish the experiment you will get SONA credit no matter what you put here," +
+        "           As long as you finish the experiment you will be paid for your time no matter what you put here," +
         "           so please be honest.<br><br>" +
         "			<!-- Gender -->" +
         '           <label for="gender"><b>Gender: &nbsp;</b></label>' +
@@ -1876,7 +1876,7 @@
       type: "survey-html-form",
       preamble:
         "You are nearly finished! We need the following information for our records.<br><br>" +
-        "           As long as you finish the experiment you will get SONA credit no matter what you put here," +
+        "           As long as you finish the experiment you will be paid for your time no matter what you put here," +
         "           so please be honest.<br><br>",
       html:
         '           <label for="gender"><b>Gender: &nbsp;</b></label>' +
@@ -2067,7 +2067,7 @@
       });
     } else {
       jatos.onLoad(function () {
-        const sona_id =  jatos.urlQueryParameters.pID;
+        //const sona_id =  jatos.urlQueryParameters.pID;
         // var completion_url = `https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=2007&credit_token=756a4fd70a1b49eb8e1907937d9e8efa&survey_code=${sona_id}`;
         const completion_url = "https://app.prolific.co/submissions/complete?cc=C1KE4T0T"
         var finish_msg = `All done! Please click <a href="${completion_url}">here</a> to be returned to Prolific and receive your credit`;
@@ -2076,9 +2076,9 @@
               display_element: jspsychTargetMLP,
               timeline: exptTimeline,
         on_finish: function() {
-          jsPsych.data.addProperties({
-            sona_id: sona_id,
-          });
+          //          jsPsych.data.addProperties({
+          //           sona_id: sona_id,
+          //         });
           var results = jsPsych.data.get().ignore(['internal_node_id','button_pressed']).csv();
           jatos.submitResultData(results);
           document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; 						width:800px; float:right"><p><br><br><br>' +finish_msg +'</p></div></div>')
